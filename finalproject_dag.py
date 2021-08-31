@@ -17,7 +17,7 @@ default_args = {
     "owner": "airflow",
     "retries" : 3,
     "retry_delay": timedelta(minutes = 2),
-    "start_date" : datetime(2021, 8, 30)
+    "start_date" : datetime(2021, 8, 31)
 }
 
 dag = DAG(
@@ -31,7 +31,7 @@ dag = DAG(
 
 def combine_dataframes():
     storage_client = storage.Client()
-    bucket_name = "final-project-bucket"
+    bucket_name = "final-csv-bucket"
     blobs = storage_client.list_blobs(bucket_name)
     combined_df = pd.DataFrame()
     for blob in blobs:
@@ -56,24 +56,24 @@ def upload_to_bigquery():
     table_id = "finalproject-egen.final_dataset.table1"
     job_config = bigquery.LoadJobConfig(
         schema = [
-                bigquery.SchemaField("State FIPS Code", "NUMERIC"),
-                bigquery.SchemaField("Sampling Stratum", "NUMERIC"),
-                bigquery.SchemaField("Unique Household ID", "NUMERIC"),
-                bigquery.SchemaField("Form Type", "NUMERIC"),
-                bigquery.SchemaField("Number of Children in Household", "NUMERIC"),
-                bigquery.SchemaField("The Conditions under Which Land or Buildings Are Held or Occupied", "NUMERIC"),
-                bigquery.SchemaField("Primary Household Language", "NUMERIC"),
-                bigqury.SchemaField("Age of Selected Child - In Years", "NUMERIC"),
-                bigquery.SchemaField("Sex of Selected Child", "NUMERIC"),
-                bigquery.SchemaField("Autism ASD - First Told Age in Years", "NUMERIC"),
-                bigquery.SchemaField("Birth Month", "NUMERIC"),
-                bigquery.SchemaField("Birth Year", "NUMERIC")
+                bigquery.SchemaField("State_FIPS_Code", "NUMERIC"),
+                bigquery.SchemaField("Sampling_Stratum", "NUMERIC"),
+                bigquery.SchemaField("Unique_Household_ID", "NUMERIC"),
+                bigquery.SchemaField("Form_Type", "NUMERIC"),
+                bigquery.SchemaField("Number_of_Children_in_Household", "NUMERIC"),
+                bigquery.SchemaField("The_Conditions_under_Which_Land_or_Buildings_Are_Held_or_Occupied", "NUMERIC"),
+                bigquery.SchemaField("Primary_Household_Language", "NUMERIC"),
+                bigquery.SchemaField("Age_of_Selected_Child_In_Years", "NUMERIC"),
+                bigquery.SchemaField("Sex_of_Selected_Child", "NUMERIC"),
+                bigquery.SchemaField("Autism_ASD", "NUMERIC"),
+                bigquery.SchemaField("Birth_Month", "NUMERIC"),
+                bigquery.SchemaField("Birth_Year", "NUMERIC")
         ],
         skip_leading_rows = 1,
         source_format = bigquery.SourceFormat.CSV,
         allow_quoted_newlines = True
     )
-    uri = "gs://us-central1-finalprojectcom-6057915f-bucket/data/final_df.csv"
+    uri = "gs://us-central1-finalprojectcom-8287972a-bucket/data/final_df.csv"
     load_job = client.load_table_from_uri(
         uri, table_id, job_config = job_config
     )
