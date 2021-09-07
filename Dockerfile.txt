@@ -1,0 +1,9 @@
+FROM python:3.7-slim
+RUN pip install google-cloud-pubsub
+RUN pip install pandas
+WORKDIR FinalProject
+COPY . .
+ENV PYTHONPATH="."
+CMD ["CsvStreamer.py","finalproject-egen","finalproject-topic", "2019 NSCHTopical_CAHMI DRC.csv"]
+ENTRYPOINT ["python3"]
+
